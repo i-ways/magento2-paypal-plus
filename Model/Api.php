@@ -271,6 +271,8 @@ class Api
      */
     public function createPayment($webProfile, $quote, $taxFailure = false)
     {
+        $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+        
         $payer = $this->buildPayer($quote);
 
         $itemList = $this->buildItemList($quote, $taxFailure);
@@ -317,6 +319,8 @@ class Api
      */
     public function patchPayment($quote)
     {
+        $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+        
         if ($this->customerSession->getPayPalPaymentId()) {
             $payment = PayPalPayment::get($this->customerSession->getPayPalPaymentId(), $this->_apiContext);
             $patchRequest = new PatchRequest();
