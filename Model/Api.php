@@ -344,6 +344,13 @@ class Api
             $payerInfoPatch->setValue($payerInfo);
             $patchRequest->addPatch($payerInfoPatch);
 
+            $itemList = $this->buildItemList($quote, false);
+            $itemListPatch = new Patch();
+            $itemListPatch->setOp('replace');
+            $itemListPatch->setPath('/transactions/0/item_list');
+            $itemListPatch->setValue($itemList);
+            $patchRequest->addPatch($itemListPatch);
+
             $amount = $this->buildAmount($quote);
             $amountPatch = new Patch();
             $amountPatch->setOp('replace');
