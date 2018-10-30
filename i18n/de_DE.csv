@@ -9,7 +9,7 @@
 "Enabled","Aktiviert"
 "Payment from Applicable Countries","Ländereinstellung"
 "Payment from Specific Countries","Erlaubte Länder"
-"Allowed Third-Party Moduls","Erlaubte Zahlungsmethoden von Drittanbietern"
+"Disallowed Third-Party Modules","Erlaubte Zahlungsmethoden von Drittanbietern"
 "Only select payment methods which doesn't require extra input in checkout.","Bitte wählen Sie nur Zahlungsmethoden aus, die keine weiteren Eingaben im Checkout benötigen."
 "PayPalPlus Development Settings","PayPalPlus Entwicklereinstellungen"
 "Enable autoloader for PayPal SDK","PayPalSDK-Autoloader aktiv"

@@ -93,7 +93,7 @@
                         <config_path>payment/iways_paypalplus_payment/specificcountry</config_path>
                     </field>
                     <field id="third_party_moduls" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Allowed Third-Party Moduls</label>
+                        <label>Disallowed Third-Party Modules</label>
                         <source_model>Iways\PayPalPlus\Model\System\Config\Source\ThirdPartyModuls</source_model>
                         <can_be_empty>1</can_be_empty>
                         <config_path>payment/iways_paypalplus_payment/third_party_moduls</config_path>
