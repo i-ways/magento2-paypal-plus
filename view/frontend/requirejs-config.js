@@ -12,9 +12,19 @@
  */
 
 var config = {
-    map: {
-        '*': {
+    map   : {
+        '*' : {
             paypalplus: '//www.paypalobjects.com/webstatic/ppplus/ppplus.min.js',
+        },
+        'Magento_Checkout/js/model/payment-service': {
+            'Magento_Checkout/js/model/payment/method-list': 'Iways_PayPalPlus/js/model/payment/method-list'
+        }
+    },
+    config: {
+        mixins: {
+            'Magento_Checkout/js/model/payment-service': {
+                'Iways_PayPalPlus/js/model/payment-service': true
+            }
         }
     }
 };
