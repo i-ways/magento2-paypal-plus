@@ -1,5 +1,5 @@
 /*browser:true*/
-/*global define*/
+/*global define, window*/
 define(
     [
         'underscore',
@@ -9,22 +9,22 @@ define(
     ], function (_, wrapper, methodList, methodListWrapper) {
         'use strict';
 
-        var paypalplusConfig = window.checkoutConfig.payment.iways_paypalplus_payment,
+        var paypalplusConfig = (((window.checkoutConfig || {}).payment || {}).iways_paypalplus_payment || {}),
             pppMethodName    = 'iways_paypalplus_payment';
 
         /**
          * inject thirdPartyMethods as valid, so they not set to null after e.g. address validation
          */
         return function (paymentService) {
-            var newSetPaymentMethods = wrapper.wrap(paymentService.setPaymentMethods, function (parentMethod, methods) {
+            paymentService.setPaymentMethods = wrapper.wrap(paymentService.setPaymentMethods, function (parentMethod, methods) {
 
                 var thirdPartyMethods = [],
                     isPPP = false;
                 // manipulate list, that third party methods are valid after ajax reload (e.g. custom OSC)
-                if (!_.isEmpty(paypalplusConfig.thirdPartyPaymentMethods)) {
+                if (!_.isUndefined(paypalplusConfig) && !_.isEmpty(paypalplusConfig.thirdPartyPaymentMethods)) {
                     // check, if PPP is active in payment list, then allow third party methods
                     if (_.findWhere(methods, {method: pppMethodName})) {
-                        _.each(paypalplusConfig.thirdPartyPaymentMethods, function (thirdParty, name) {
+                      _.each(paypalplusConfig.thirdPartyPaymentMethods, function (thirdParty, name) {
                             isPPP = true;
                             thirdPartyMethods.push(name);
                             methods.push({
@@ -51,8 +51,6 @@ define(
                 // and populate list for subscribers
                 methodList(methodListWrapper());
             });
-
-            paymentService.setPaymentMethods = newSetPaymentMethods;
             return paymentService;
         }
     });
