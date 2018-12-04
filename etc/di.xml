@@ -16,12 +16,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Iways\PayPalPlus\Api\GuestPPPPaymentInformationManagementInterface" type="Iways\PayPalPlus\Model\PaymentInformationManagement\GuestPPPPaymentInformationManagement" />
     <preference for="Iways\PayPalPlus\Api\PPPPaymentInformationManagementInterface" type="Iways\PayPalPlus\Model\PaymentInformationManagement\PPPPaymentInformationManagement" />
-    <type name="Magento\Quote\Model\PaymentMethodManagement">
-        <arguments>
-            <argument name="methodList" xsi:type="object">Iways\PayPalPlus\Model\MethodList</argument>
-        </arguments>
-    </type>
     <type name="Magento\Sales\Model\Order\Payment">
-        <plugin name="paymentAddPpp" type="\Iways\PayPalPlus\Model\Plugin\AfterOrderPaymentGetExtensionAttributes"/>
+        <plugin name="paymentAddPpp" type="Iways\PayPalPlus\Model\Plugin\AfterOrderPaymentGetExtensionAttributes"/>
+    </type>
+
+    <type name="Magento\Payment\Model\MethodList">
+        <plugin name="paymentHidePayPalMethods" type="Iways\PayPalPlus\Plugin\HidePaypalMethods"/>
     </type>
 </config>

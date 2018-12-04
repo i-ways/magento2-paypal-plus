@@ -63,17 +63,20 @@ class ConfigProvider implements ConfigProviderInterface
     protected $urlBuilder;
 
     /**
-     * @var MethodList
+     * @var \Magento\Payment\Api\PaymentMethodListInterface
      */
-    protected $methodLost;
+    protected $paymentMethodList;
 
     /**
      * @param PaymentHelper $paymentHelper
      * @param Escaper $escaper
      * @param \Iways\PayPalPlus\Helper\Data $payPalPlusHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Payment\Model\Config $paymentConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Payment\Model\Config  $paymentConfig
+     * @param \Magento\Payment\Api\PaymentMethodListInterface $paymentMethodList
      * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PaymentHelper $paymentHelper,
@@ -82,7 +85,7 @@ class ConfigProvider implements ConfigProviderInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Payment\Model\Config $paymentConfig,
-        MethodList $methodList,
+        \Magento\Payment\Api\PaymentMethodListInterface $paymentMethodList,
         \Magento\Framework\UrlInterface $urlBuilder,
         LoggerInterface $logger
     ) {
@@ -92,7 +95,7 @@ class ConfigProvider implements ConfigProviderInterface
         $this->scopeConfig = $scopeConfig;
         $this->checkoutSession = $checkoutSession;
         $this->paymentConfig = $paymentConfig;
-        $this->methodList = $methodList;
+        $this->paymentMethodList = $paymentMethodList;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
     }
@@ -139,7 +142,8 @@ class ConfigProvider implements ConfigProviderInterface
 
     protected function getThirdPartyMethods()
     {
-        $paymentMethods = $this->methodList->getAvailableMethods($this->checkoutSession->getQuote(), false);
+        $storeId = $this->checkoutSession->getQuote()->getStoreId();
+        $paymentMethods = $this->paymentMethodList->getActiveList($storeId);
         $allowedPPPMethods = explode(
             ',',
             $this->scopeConfig->getValue(
