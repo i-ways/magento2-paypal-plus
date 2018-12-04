@@ -81,7 +81,7 @@ class MethodList extends \Magento\Payment\Model\MethodList
                     if (
                     ($method->getCode() == Payment::CODE
                         || $method->getCode() == self::AMAZON_PAYMENT
-                        || !in_array($method->getCode(), $allowedPPPMethods))
+                        || in_array($method->getCode(), $allowedPPPMethods))
                     ) {
                         $methods[] = $method;
                     }
