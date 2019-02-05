@@ -123,7 +123,9 @@ class Create extends \Magento\Framework\App\Action\Action
                 $order = $this->orderFactory->create()->load($orderId);
                 if ($order->getCanSendNewEmailFlag()) {
                     try {
-                        $this->orderSender->send($order);
+						if (!$order->getEmailSent()) {
+							$this->orderSender->send($order);
+						}
                     } catch (\Exception $e) {
                         $this->logger->critical($e);
                     }
