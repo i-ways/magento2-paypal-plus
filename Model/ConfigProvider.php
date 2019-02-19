@@ -70,15 +70,17 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * ConfigProvider constructor.
-     * @param PaymentHelper $paymentHelper
-     * @param Escaper $escaper
-     * @param \Iways\PayPalPlus\Helper\Data $payPalPlusHelper
+     *
+     * @param PaymentHelper                                      $paymentHelper
+     * @param Escaper                                            $escaper
+     * @param \Iways\PayPalPlus\Helper\Data                      $payPalPlusHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Payment\Model\Config $paymentConfig
-     * @param MethodList $methodList
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param LoggerInterface $logger
+     * @param \Magento\Checkout\Model\Session                    $checkoutSession
+     * @param \Magento\Payment\Model\Config                      $paymentConfig
+     * @param MethodList                                         $methodList
+     * @param \Magento\Framework\UrlInterface                    $urlBuilder
+     * @param LoggerInterface                                    $logger
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -90,7 +92,9 @@ class ConfigProvider implements ConfigProviderInterface
         \Magento\Payment\Model\Config $paymentConfig,
         MethodList $methodList,
         \Magento\Framework\UrlInterface $urlBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        \Magento\Framework\View\Asset\Repository $assetRepo
+
     ) {
         $this->escaper = $escaper;
         $this->method = $paymentHelper->getMethodInstance($this->methodCode);
@@ -101,6 +105,7 @@ class ConfigProvider implements ConfigProviderInterface
         $this->methodList = $methodList;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
+        $this->assetRepo = $assetRepo;
     }
 
     /**
@@ -111,12 +116,14 @@ class ConfigProvider implements ConfigProviderInterface
         return $this->method->isAvailable() ? [
             'payment' => [
                 'iways_paypalplus_payment' => [
-                    'paymentExperience' => $this->payPalPlusHelper->getPaymentExperience(),
-                    'showPuiOnSandbox' => $this->scopeConfig->getValue('iways_paypalplus/dev/pui_sandbox', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) ? true : false,
-                    'showLoadingIndicator' => $this->scopeConfig->getValue('payment/iways_paypalplus_payment/show_loading_indicator', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) ? true : false,
-                    'mode' => $this->scopeConfig->getValue('iways_paypalplus/api/mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                    'country' => $this->getCountry(),
-                    'language' => $this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                    'paymentExperience'        => $this->payPalPlusHelper->getPaymentExperience(),
+                    'showPuiOnSandbox'         => $this->scopeConfig->getValue('iways_paypalplus/dev/pui_sandbox', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+                        ? true : false,
+                    'showLoadingIndicator'     => $this->scopeConfig->getValue('payment/iways_paypalplus_payment/show_loading_indicator', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+                        ? true : false,
+                    'mode'                     => $this->scopeConfig->getValue('iways_paypalplus/api/mode', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                    'country'                  => $this->getCountry(),
+                    'language'                 => $this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                     'thirdPartyPaymentMethods' => $this->getThirdPartyMethods()
                 ],
             ],
@@ -156,10 +163,21 @@ class ConfigProvider implements ConfigProviderInterface
                 strpos($paymentMethod->getCode(), 'paypal') === false
                 && in_array($paymentMethod->getCode(), $allowedPPPMethods)
             ) {
+                if ($methodImage = $this->scopeConfig->getValue(
+                    'payment/iways_paypalplus_section/third_party_modul_info/image_' . $paymentMethod->getCode(),
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )) {
+                    if (substr($methodImage, 0, 4) != 'http') {
+                        // this is not an absolute url
+                        // try to use it as relative image path within pub folder
+                        $methodImage = $this->assetRepo->getUrl($methodImage);
+                    }
+                }
+
                 $method = [
                     'redirectUrl' => $this->urlBuilder->getUrl('checkout', ['_secure' => true]),
-                    'methodName' => $paymentMethod->getTitle(),
-                    'imageUrl' => '',
+                    'methodName'  => $paymentMethod->getTitle(),
+                    'imageUrl'    => $methodImage,
                     'description' => $this->scopeConfig->getValue(
                         'payment/iways_paypalplus_section/third_party_modul_info/text_' . $paymentMethod->getCode(),
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE

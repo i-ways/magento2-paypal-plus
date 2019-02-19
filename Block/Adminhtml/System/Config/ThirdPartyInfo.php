@@ -55,19 +55,24 @@ class ThirdPartyInfo extends \Magento\Config\Block\System\Config\Form\Fieldset
         foreach ($this->paymentConfig->getActiveMethods() as $paymentMethod) {
             if (in_array($paymentMethod->getCode(), $thirdPartyMethods)) {
                 $thirdPartyMethod = $paymentMethod->getCode();
-                $field = clone $dummyField;
-                $field->setData('name', str_replace('dummy', $thirdPartyMethod, $field->getName()));
-                $field->setData('label', $paymentMethod->getTitle());
-                $field->setData('value', $this->_scopeConfig->getValue('payment/iways_paypalplus_section/third_party_modul_info/text_' . $thirdPartyMethod));
-                $fieldConfig = $field->getData('field_config');
-                $fieldConfig['id'] = 'text_' . $thirdPartyMethod;
-                $fieldConfig['label'] = $paymentMethod->getTitle();
-                $fieldConfig['config_path'] =
-                    'payment/iways_paypalplus_section/third_party_modul_info/text_' . $thirdPartyMethod;
 
-                $field->setData('field_config', $fieldConfig);
-                $field->setData('html_id', str_replace('dummy', $thirdPartyMethod, $field->getData('html_id')));
-                $html .= $field->toHtml();
+                foreach(['text', 'image'] as $item){
+
+                    $field = clone $dummyField;
+                    $field->setData('name', str_replace('item_dummy', $item.'_'.$thirdPartyMethod, $field->getName()));
+                    $field->setData('label', $paymentMethod->getTitle());
+                    $field->setData('value', $this->_scopeConfig->getValue('payment/iways_paypalplus_section/third_party_modul_info/'.$item.'_' . $thirdPartyMethod));
+                    $fieldConfig = $field->getData('field_config');
+                    $fieldConfig['id'] = $item.'_' . $thirdPartyMethod;
+                    $fieldConfig['label'] = $paymentMethod->getTitle();
+                    $fieldConfig['config_path'] =
+                        'payment/iways_paypalplus_section/third_party_modul_info/'.$item.'_' . $thirdPartyMethod;
+
+                    $field->setData('field_config', $fieldConfig);
+                    $field->setData('html_id', str_replace('item_dummy', $item.'_'.$thirdPartyMethod, $field->getData('html_id')));
+                    $html .= $field->toHtml();
+                }
+
             }
         }
         $html .= $this->_getFooterHtml($element);

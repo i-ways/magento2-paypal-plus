@@ -103,9 +103,9 @@
                     <label>PayPalPlus Third party methods info text</label>
                     <comment>Only selected and saved third party payments will be shown.</comment>
                     <frontend_model>Iways\PayPalPlus\Block\Adminhtml\System\Config\ThirdPartyInfo</frontend_model>
-                    <field id="text_dummy" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="item_dummy" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>dummy</label>
-                        <config_path>payment/third_party_modul_info/text_dummy</config_path>
+                        <config_path>payment/third_party_modul_info/item_dummy</config_path>
                     </field>
                 </group>
                 <group id="iways_paypalplus_dev" translate="label" showInDefault="1" showInWebsite="1" sortOrder="60">
