@@ -60,7 +60,7 @@ class ThirdPartyInfo extends \Magento\Config\Block\System\Config\Form\Fieldset
 
                     $field = clone $dummyField;
                     $field->setData('name', str_replace('item_dummy', $item.'_'.$thirdPartyMethod, $field->getName()));
-                    $field->setData('label', $paymentMethod->getTitle());
+                    $field->setData('label', $paymentMethod->getTitle() . ' ' . __($item));
                     $field->setData('value', $this->_scopeConfig->getValue('payment/iways_paypalplus_section/third_party_modul_info/'.$item.'_' . $thirdPartyMethod));
                     $fieldConfig = $field->getData('field_config');
                     $fieldConfig['id'] = $item.'_' . $thirdPartyMethod;

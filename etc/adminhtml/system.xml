@@ -100,7 +100,7 @@
                     </field>
                 </group>
                 <group id="third_party_modul_info" type="text" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
-                    <label>PayPalPlus Third party methods info text</label>
+                    <label>PayPalPlus Third party methods info</label>
                     <comment>Only selected and saved third party payments will be shown.</comment>
                     <frontend_model>Iways\PayPalPlus\Block\Adminhtml\System\Config\ThirdPartyInfo</frontend_model>
                     <field id="item_dummy" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

@@ -1,6 +1,6 @@
 "PayPalPlus Settings","PayPalPlus-Einstellungen"
 "PayPalPlus Payment Settings","PayPalPlus-Einstellungen"
-"PayPalPlus Third party methods info text","PayPalPlus Drittanbieterinformationstexte"
+"PayPalPlus Third party methods info","PayPalPlus Drittanbieterinformationen"
 "Only selected and saved third party payments will be shown.","Nur ausgewählte und gespeicherte Zahlungsmethoden von Drittanbietern werden angezeigt."
 "PayPalPlus Api Settings","PayPalPlus API-Einstellungen"
 "Client ID","Klienten-ID"
@@ -47,3 +47,5 @@
 "Reduces API calls","Reduziert die API-Aufrufe"
 "Only available for merchants located in Germany. Please switch your merchant country to Germany. (Merchant Location -> Merchant Country -> Germany)","Nur verfügbar für Händler mit Standort in Deutschland. Bitte stellen Sie den Händlerstandort auf Deutschland. Händlerstandort -> Händlerland -> Deutschland"
 "Add payment methods to PayPal-Plus frame","Zahlungsmethoden dem PayPal-Plus Frame hinzufügen"
+"text", "Text"
+"image", "Bild"
