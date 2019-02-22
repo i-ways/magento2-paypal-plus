@@ -14,7 +14,7 @@
 
 namespace Iways\PayPalPlus\Controller\Webhooks;
 
-use Magento\Framework\App\CsrfAwareActionInterface;
+use Iways\PayPalPlus\Compatibility\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 
 /**
