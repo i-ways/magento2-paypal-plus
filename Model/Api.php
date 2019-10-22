@@ -272,6 +272,8 @@ class Api
             return false;
         }
 
+        $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+
         $payer = $this->buildPayer($quote);
 
         $itemList = $this->buildItemList($quote, $taxFailure);
@@ -316,6 +318,8 @@ class Api
             $payment = PayPalPayment::get($this->customerSession->getPayPalPaymentId(), $this->_apiContext);
             $patchRequest = new PatchRequest();
 
+            $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+            
             if (!$quote->isVirtual()) {
                 $shippingAddress = $this->buildShippingAddress($quote);
                 $addressPatch = new Patch();
