@@ -28,6 +28,7 @@ use PayPal\Api\Address;
 use PayPal\Api\WebProfile;
 use PayPal\Api\Presentation;
 use PayPal\Api\Payment as PayPalPayment;
+use PayPal\Api\Sale as PayPalSale;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\InputFields;
@@ -314,6 +315,18 @@ class Api
     }
 
     /**
+     * Get a sale
+     *
+     * @param string $paymentId
+     *
+     * @return \PayPal\Api\Sale
+     */
+    public function getSale($paymentId)
+    {
+        return PayPalSale::get($paymentId, $this->_apiContext);
+    }
+
+    /**
      * Create payment for current quote
      *
      * @param WebProfile $webProfile
@@ -508,9 +521,7 @@ class Api
      */
     public function refundPayment($paymentId, $amount)
     {
-        $transactions = $this->getPayment($paymentId)->getTransactions();
-        $relatedResources = $transactions[0]->getRelatedResources();
-        $sale = $relatedResources[0]->getSale();
+        $sale = $this->getSale($paymentId);
         $refund = new \PayPal\Api\Refund();
 
         $ppAmount = new Amount();
