@@ -8,9 +8,9 @@
         }
     ],
     "require": {
-        "php": "~7.2.0|~7.3.0|~7.4.3",
+        "php": "~7.2.0||~7.3.0||~7.4.3",
         "paypal/rest-api-sdk-php": "^1.6",
-        "magento/module-paypal": "100.3.*"
+        "magento/module-paypal": "100.3.*||101.0.*"
     },
     "authors": [
         {
