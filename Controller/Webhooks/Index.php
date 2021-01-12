@@ -95,7 +95,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         \Iways\PayPalPlus\Model\Webhook\EventFactory $webhookEventFactory,
         \Iways\PayPalPlus\Model\ApiFactory $apiFactory,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem\DriverInterface $driver
+        \Magento\Framework\Filesystem\Driver\File $driver
     ) {
         $this->_logger = $logger;
         $this->_webhookEventFactory = $webhookEventFactory;
