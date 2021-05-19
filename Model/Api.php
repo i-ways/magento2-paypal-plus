@@ -522,10 +522,17 @@ class Api
     public function refundPayment($paymentId, $amount)
     {
         $transactions = [];
-        if (!$transactions = $this->getPayment($paymentId)->getTransactions()) {
+        try {
+            $transactions = $this->getPayment($paymentId)->getTransactions();
+        } catch (PayPalConnectionException $e) {
+            /*
+             * $this->getPayment() with an invalid ID will throw a PayPalConnectionException
+             * we catch this and try to get the payment via sale
+             */
             $saleJson = $this->getSale($paymentId);
             $transactions = $this->getPayment($saleJson->parent_payment)->getTransactions();
         }
+
         $relatedResources = $transactions[0]->getRelatedResources();
         $sale = $relatedResources[0]->getSale();
         $refund = new \PayPal\Api\Refund();
