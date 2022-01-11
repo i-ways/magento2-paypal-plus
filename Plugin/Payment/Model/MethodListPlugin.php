@@ -24,7 +24,7 @@ use Magento\Payment\Model\MethodList;
 
 class MethodListPlugin
 {
-    const AMAZON_PAYMENT = 'amazon_payment';
+    const AMAZON_PAYMENT = ['amazon_payment', 'amazon_payment_v2'];
     const CHECK_PPP_FUNCTION_NAME = 'getCheckPPP';
 
     /**
@@ -72,7 +72,7 @@ class MethodListPlugin
 
             foreach ($result as $method) {
                 if ($method->getCode() == Payment::CODE
-                    || $method->getCode() == self::AMAZON_PAYMENT
+                    || in_array($method->getCode(), self::AMAZON_PAYMENT, true)
                     || !in_array($method->getCode(), $allowedPPPMethods)
                 ) {
                     $allowedMethods[] = $method;
