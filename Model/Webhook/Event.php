@@ -181,6 +181,7 @@ class Event
             }
 
             $this->_order->addStatusToHistory(
+                false,
                 __(
                     'Notified customer about invoice #%1.',
                     $invoice->getIncrementId()
