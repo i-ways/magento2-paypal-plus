@@ -18,6 +18,8 @@
 
 namespace Iways\PayPalPlus\Model\Webhook;
 
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+
 /**
  * Iways PayPalPlus Event Handler
  *
@@ -68,6 +70,13 @@ class Event
     protected $salesOrderFactory;
 
     /**
+     * Protected $invoiceSender
+     * 
+     * @var \Magento\Sales\Model\Order\Email\Sender\InvoiceSender
+     */
+    protected $invoiceSender;
+
+    /**
      * Protected $logger
      *
      * @var \Psr\Log\LoggerInterface
@@ -77,10 +86,12 @@ class Event
     public function __construct(
         \Magento\Sales\Model\Order\Payment\TransactionFactory $salesOrderPaymentTransactionFactory,
         \Magento\Sales\Model\OrderFactory $salesOrderFactory,
+        \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->salesOrderPaymentTransactionFactory = $salesOrderPaymentTransactionFactory;
         $this->salesOrderFactory = $salesOrderFactory;
+        $this->invoiceSender = $invoiceSender;
         $this->logger = $logger;
     }
 
@@ -163,13 +174,20 @@ class Event
         // notify customer
         $invoice = $payment->getCreatedInvoice();
         if ($invoice && !$this->_order->getEmailSent()) {
-            $this->_order->queueNewOrderEmail()
-                ->addStatusHistoryComment(
-                    __(
-                        'Notified customer about invoice #%1.',
-                        $invoice->getIncrementId()
-                    )
-                )->setIsCustomerNotified(true)->save();
+            try {
+                $this->invoiceSender->send($invoice);
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+            }
+
+            $this->_order->addStatusToHistory(
+                false,
+                __(
+                    'Notified customer about invoice #%1.',
+                    $invoice->getIncrementId()
+                ),
+                true
+            )->save();
         }
     }
 
