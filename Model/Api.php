@@ -865,6 +865,7 @@ class Api
                     -(
                         $quote->getBillingAddress()->getDiscountAmount()
                         + $quote->getBillingAddress()->getBaseDiscountTaxCompensationAmount()
+                        + $quote->getBillingAddress()->getShippingDiscountTaxCompensationAmount()
                     )
                 );
             }
@@ -874,6 +875,7 @@ class Api
                     -(
                         $quote->getShippingAddress()->getDiscountAmount()
                         + $quote->getShippingAddress()->getBaseDiscountTaxCompensationAmount()
+                        + $quote->getShippingAddress()->getShippingDiscountTaxCompensationAmount()
                     )
                 );
             }
