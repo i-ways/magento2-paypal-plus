@@ -54,7 +54,11 @@ class PaymentInformationManagement
     public function patchPayment($cartId)
     {
         $quote = $this->quoteManagement->getActive($cartId);
-        return $this->payPalPlusApiFactory->create()->patchPayment($quote);
+        $result = $this->payPalPlusApiFactory->create()->patchPayment($quote);
+        if ($result === false) {
+            throw new \Exception('Could not patch payment for quote');
+        }
+        return $result;
     }
 
     public function handleComment($paymentMethod)
